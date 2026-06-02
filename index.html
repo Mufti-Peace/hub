@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mufti's Mobile Hub</title>
+    <style>
+        /* Container adjustment for badge positioning */
+.product-card {
+    position: relative; /* Allows the badge to anchor precisely to the card */
+    overflow: hidden;   /* Keeps the card edges clean */
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    width: 250px;
+}
+
+/* Base Badge Styling */
+.badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    padding: 5px 12px;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: white;
+    border-radius: 4px;
+    z-index: 10; /* Ensures it sits firmly on top of the image */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    text-transform: uppercase;
+}
+
+/* Custom Colors for Different Badges */
+.badge-sale {
+    background-color: #dc3545; /* Crimson Red for Hot Sales */
+}
+
+.badge-new {
+    background-color: #28a745; /* Forest Green for New Arrivals */
+}
+    .search-container {
+    text-align: center;
+    margin-bottom: 30px;
+    width: 100%;
+}
+#search-bar {
+    width: 100%;
+    max-width: 500px;
+    padding: 12px 20px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 25px; /* Gives it a clean, rounded pill shape */
+    outline: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+#search-bar:focus {
+    border-color: #007bff;
+    box-shadow: 0 4px 10px rgba(0,123,255,0.2); /* Soft blue glow when typing */
+}
+
+        body {
+    font-family: Arial, sans-serif;
+    /* Clean, abstract tech-textured background */
+    background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop');
+    background-size: cover;       /* Makes the image fit the whole screen */
+    background-position: center;   /* Centers the image */
+    background-attachment: fixed; /* Keeps the image still while you scroll */
+    margin: 0;
+    padding: 20px;
+}
+        .header {
+    text-align: center;   /* Keeps the title perfectly centered */
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    color: #ffffff;       /* Makes the text bright white */
+    font-size: 2.5em;
+    font-weight: bold;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6); /* Adds a dark shadow so it stands out */
+}
+
+        .product-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        .product-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 250px;
+        }
+        .product-card img {
+            max-width: 100%;
+            height: 150px;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+        .product-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .product-price {
+            color: #28a745;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1em;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .cart-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        #cart-items {
+            list-style-type: none;
+            padding: 0;
+        }
+        #cart-items li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .checkout-btn {
+            background: #28a745;
+            display: none;
+            margin-top: 20px;
+        }.clear-btn {
+    background: #6c757d; /* Clean, modern slate gray */
+    display: none;       /* Hidden by default, just like the checkout button */
+    margin-top: 20px;
+    margin-bottom: 10px; /* Puts a little space between the two buttons */
+}
+.clear-btn:hover {
+    background: #5a6268; /* Darkens slightly on hover */
+}
+.store-footer {
+    background: rgba(255, 255, 255, 0.9); /* White overlay with slight transparency */
+    backdrop-filter: blur(5px);           /* Smooth blur effect */
+    padding: 30px 20px 10px 20px;
+    border-radius: 8px;
+    max-width: 800px;
+    margin: 40px auto 20px auto;          /* Centers it and pushes it down from the cart */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;                      /* Keeps it responsive on mobile screens */
+    gap: 20px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-section h3 {
+    color: #333;
+    border-bottom: 2px solid #007bff;     /* Clean blue accent line under headers */
+    padding-bottom: 5px;
+    margin-top: 0;
+}
+
+.footer-section p {
+    color: #555;
+    font-size: 0.9em;
+    line-height: 1.6;
+    margin: 5px 0;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    font-size: 0.8em;
+    color: #777;
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Mufti's Mobile Hub</h1>
+    </div>
+
+    <div class="search-container">
+    <input type="text" id="search-bar" placeholder="Search for phones or accessories..." onkeyup="filterProducts()">
+</div>
+<main class="product-grid">
+    <div class="product-card">
+        <span class="badge badge-new">New</span><img src="images/phone.jpg" alt="Samsung A06" onerror="this.src='https://via.placeholder.com/150?text=Samsung+A06'">
+        <div class="product-title">SAMSUNG A06</div>
+        <div class="product-price">GH₵ 850</div>
+        <button class="btn" onclick="addToCart('SAMSUNG A06', 850)">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <span class="badge badge-new">New</span><img src="images/cable.jpg" alt="ANKER Cable" onerror="this.src='https://via.placeholder.com/150?text=Anker+Cable'">
+        <div class="product-title"> USB-C FAST CABLE</div>
+        <div class="product-price">GH₵ 20</div>
+        <button class="btn" onclick="addToCart('ANKER USB-C FAST CABLE', 20)">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <img src="images/protector.jpg" alt="phone protector" onerror="this.src='https://via.placeholder.com/150?text=Samsung+A06'">
+        <div class="product-title">PHONE PROTECTOR</div>
+        <div class="product-price">GH₵ 10</div>
+        <button class="btn" onclick="addToCart('PHONE PROTECTOR', 10)">Add to Cart</button>
+    </div>
+
+    <div class="product-card">
+        <img src="images/phone case.jpg" alt="MagSafe Case" onerror="this.src='https://via.placeholder.com/150?text=MagSafe+Case'">
+        <div class="product-title">PHONE CASE</div>
+        <div class="product-price">GH₵ 20</div>
+        <button class="btn" onclick="addToCart('PHONE CASE', 20)">Add to Cart</button>
+    </div>
+</main>
+
+    <div class="cart-section">
+        <h2>Shopping Cart Ledger</h2>
+        <p id="cart-status">Your cart is currently empty. Start shopping!</p>
+        <ul id="cart-items"></ul>
+        
+        <div id="cart-total" style="display: none; font-size: 1.2em; font-weight: bold; margin-bottom: 20px; color: #28a745;">
+            Total Amount: $0
+        </div>
+        <button id="clear-btn" class="btn clear-btn" onclick="clearCart()">
+    Clear Cart 🗑️
+</button>
+
+<button id="checkout-btn" class="btn checkout-btn" onclick="checkoutOrder()">
+    Proceed to Checkout 💳
+</button>
+        <button id="checkout-btn" class="btn checkout-btn" onclick="checkoutOrder()">
+            Proceed to Checkout 💳
+        </button>
+    </div>
+
+    <script>
+        // 1. Setup our cart variables
+        let cart = [];
+        let totalVal = 0;
+
+        // 2. The Add to Cart Logic
+function addToCart(itemName, itemPrice) {
+    cart.push({ name: itemName, price: itemPrice });
+    totalVal += itemPrice;
+// Add this line inside your addToCart function right where the checkout button is shown:
+document.getElementById('clear-btn').style.display = 'block';
+    document.getElementById('cart-status').style.display = 'none';
+    document.getElementById('cart-total').style.display = 'block';
+    document.getElementById('checkout-btn').style.display = 'block';
+
+    // Changed '$' to 'GH₵ '
+    document.getElementById('cart-total').innerText = 'Total Amount: GH₵ ' + totalVal;
+
+    let li = document.createElement('li');
+    // Changed '$' to 'GH₵ '
+    li.innerText = itemName + ' - GH₵ ' + itemPrice;
+    document.getElementById('cart-items').appendChild(li);
+}
+
+// 3. The WhatsApp Checkout Logic
+function checkoutOrder() {
+    const phoneNumber = "233248930690";
+    let message = "Hello Mufti's Mobile Hub!\nI would like to place an order for:\n\n";
+    
+    cart.forEach(item => {
+        // Changed '$' to 'GH₵' for the items list
+        message += `- ${item.name} - GH₵ ${item.price}\n`;
+    });
+    
+    // Changed '$' to 'GH₵' for the final total
+    message += `\n*Total Amount: GH₵ ${totalVal}*\n\nPlease let me know the payment and delivery details.`;
+
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+    window.open(whatsappUrl, '_blank');
+
+    // Reset the cart
+    cart = [];
+    totalVal = 0;
+    document.getElementById('cart-items').innerHTML = '';
+    document.getElementById('cart-status').style.display = 'block';
+    document.getElementById('cart-total').style.display = 'none';
+    document.getElementById('checkout-btn').style.display = 'none';
+}
+// 4. The Product Search Filter Logic
+function filterProducts() {
+    // Get the text the user typed and convert it to lowercase
+    let filter = document.getElementById('search-bar').value.toLowerCase();
+    
+    // Grab all the product card elements on the page
+    let cards = document.getElementsByClassName('product-card');
+
+    // Loop through every single card
+    for (let i = 0; i < cards.length; i++) {
+        // Find the title element inside the current card
+        let titleElement = cards[i].querySelector('.product-title');
+        let titleText = titleElement.innerText || titleElement.textContent;
+
+        // If the title matches what was typed, show the card. Otherwise, hide it!
+        if (titleText.toLowerCase().indexOf(filter) > -1) {
+            cards[i].style.display = ""; // Shows the card
+        } else {
+            cards[i].style.display = "none"; // Hides the card
+        }
+    }
+}
+// 5. The Clear Cart Logic
+function clearCart() {
+    // 1. Reset the backend data tracking arrays
+    cart = [];
+    totalVal = 0;
+
+    // 2. Wipe out the visible list items and reset texts
+    document.getElementById('cart-items').innerHTML = '';
+    document.getElementById('cart-status').style.display = 'block';
+    
+    // 3. Hide the layout elements and buttons again
+    document.getElementById('cart-total').style.display = 'none';
+    document.getElementById('checkout-btn').style.display = 'none';
+    document.getElementById('clear-btn').style.display = 'none';
+}
+    </script>
+    <footer class="store-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>Contact Us 📱</h3>
+            <p><strong>WhatsApp:</strong> +233 24 893 0690</p>
+            <p><strong>Call/Text:</strong> +233 24 893 0690</p>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Our Location 📍</h3>
+            <p>Kumasi Nsenie, Ghana</p>
+            <p>Available for local pickup & nationwide delivery</p>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Business Hours ⏰</h3>
+            <p>Monday - Saturday: 8:00 AM - 6:00 PM</p>
+            <p>Sunday: Closed (Orders processed Monday)</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 Mufti's Mobile Hub. All Rights Reserved.</p>
+    </div>
+</footer>
+</body>
+</html>
